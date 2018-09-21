@@ -9,10 +9,10 @@ import org.apache.hadoop.mapred.*;
 
 public class IPLSortReducer extends MapReduceBase implements Reducer<IntWritable, Text, Text, IntWritable> {
 
-	public void reduce(IntWritable t_key, Iterator<Text> values, OutputCollector<Text,IntWritable> output, Reporter reporter) throws IOException {
-		
+	public void reduce(IntWritable t_key, Iterator<Text> values, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException {
 		while(values.hasNext()){
-			output.collect(values.next(), t_key);
+			String[] combo = values.next().toString().split("_");
+			output.collect(new Text("|Bowler: "+ combo[0] + "       | Batsman: "+ combo[1]), t_key);
 		}
 	}
 }

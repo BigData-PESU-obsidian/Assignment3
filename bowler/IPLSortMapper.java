@@ -16,7 +16,7 @@ public class IPLSortMapper extends MapReduceBase implements Mapper<LongWritable,
 		String valueString = value.toString();
 		String[] EachBall = valueString.split(",");
 		
-		output.collect(new IntWritable(Integer.parseInt(EachBall[1])), new Text(EachBall[0]));
+		output.collect(new IntWritable(Integer.parseInt(EachBall[1])),  new Text(EachBall[0]));
 		
 	}
 }

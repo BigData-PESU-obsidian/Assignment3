@@ -1,11 +1,30 @@
 
 package IPLanalyser;
 
+import java.nio.ByteBuffer;
+
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
+import org.apache.hadoop.mapreduce.Job;
 
 public class IPLDriver {
+
+    public static class DescendingKeyComparator extends WritableComparator {
+		protected DescendingKeyComparator() {
+			super(IntWritable.class, true);
+		}
+		
+		@SuppressWarnings("rawtypes")
+		@Override
+		public int compare(WritableComparable w1, WritableComparable w2) {
+			IntWritable key1 = (IntWritable) w1;
+			IntWritable key2 = (IntWritable) w2;          
+			return -1 * key1.compareTo(key2);
+		}
+	}
+	
 	public static void main(String[] args) {
 		JobClient my_client = new JobClient();
 		
@@ -43,6 +62,8 @@ public class IPLDriver {
 		sort_output.setOutputFormat(TextOutputFormat.class);
 		sort_output.set("mapred.textoutputformat.separator", ",");
 
+		sort_output.setOutputKeyComparatorClass(DescendingKeyComparator.class);
+		
 		// Set input and output directories using command line arguments, 
 		//arg[0] = name of input directory on HDFS, and arg[1] =  name of output directory to be created to store the output file.
 		
